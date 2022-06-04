@@ -7,10 +7,13 @@
       <!-- This is done so that we dont have to increase index again and again -->
       <slot v-bind="++i"></slot>
       <h4 style="padding-left: 2rem">Page {{ i }}</h4>
-      <div
-        style="border: 1px solid green; margin: 10px"
-        :id="`editor-${page.id}`"
-      ></div>
+      <div style="display: flex">
+        <div
+          style="border: 1px solid green; margin: 10px; flex: 1"
+          :id="`editor-${page.id}`"
+        ></div>
+        <div @click="removePage(page.id)">X</div>
+      </div>
 
       <div style="text-align: center">
         <button @click="addNewPage(i)">+ New Page</button>
@@ -34,6 +37,7 @@ export default {
         {
           id: useId,
           ["editor-" + useId]: new EditorJS({
+            autofocus: true,
             holder: "editor-" + useId,
             data: {
               blocks: [
@@ -67,6 +71,7 @@ export default {
       this.pages.splice(i, 0, newObj);
 
       newObj["editor-" + uniqId] = new EditorJS({
+        autofocus: true,
         holder: "editor-" + uniqId,
         data: {
           blocks: [
@@ -90,6 +95,9 @@ export default {
       });
 
       console.log(this.formData);
+    },
+    removePage(id) {
+      this.pages = this.pages.filter((page) => page.id !== id);
     },
   },
 };
